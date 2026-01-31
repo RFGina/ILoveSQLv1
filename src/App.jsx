@@ -15,12 +15,11 @@ function App() {
       <main>
 
         <Routes>
-          <Route path="/paso-a-paso" element={<PasoAPaso />} />
-          <Route path="/noticias" element={<Noticias />} />
-          <Route path="/resolucion-a-problemas" element={<Problemas />} />
+          <Route path="/paso-a-paso/:id?" element={<PasoAPaso />} />
+          <Route path="/noticias/:id?" element={<Noticias />} />
+          <Route path="/resolucion-a-problemas/:id?" element={<Problemas />} />
           <Route path="/" element={<Inicio />} />
           <Route path="/buscar" element={<SearchPage />} />
-
         </Routes>
         <SocialFloat />
       </main>

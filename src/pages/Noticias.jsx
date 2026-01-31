@@ -1,29 +1,42 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"; // <--- CAMBIO AQUÍ: Importar useParams
 import { MdBookmarkBorder } from "react-icons/md";
 import { getContenidoBySeccion } from "../api/coneapi";
 import { CiCircleChevLeft, CiCircleChevRight } from "react-icons/ci";
 
-
 export default function Noticias() {
+    const { id } = useParams(); // <--- CAMBIO AQUÍ: Capturar el ID de la URL
     const [pages, setPages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
 
-
     useEffect(() => {
-
         getContenidoBySeccion("Noticias").then((data) => {
             setPages(data);
+
+            // --- LÓGICA PARA EL BUSCADOR ---
+            // Si hay un ID en la URL, buscamos en qué posición del array está ese ID
+            if (id && data.length > 0) {
+                const targetIndex = data.findIndex(
+                    (p) => p.id?.toString() === id.toString()
+                );
+
+                // Si lo encuentra, cambiamos el estado de 'page' a ese índice
+                if (targetIndex !== -1) {
+                    setPage(targetIndex);
+                }
+            }
+            // ------------------------------
+
             setLoading(false);
         });
-    }, []);
+    }, [id]); // <--- CAMBIO AQUÍ: Ejecutar si el ID de la URL cambia
 
     const hideScrollbarStyle = {
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
         WebkitOverflowScrolling: 'touch'
     };
-
 
     if (loading) {
         return (
@@ -32,7 +45,6 @@ export default function Noticias() {
             </div>
         );
     }
-
 
     if (pages.length === 0) {
         return (
@@ -48,7 +60,6 @@ export default function Noticias() {
         <div className="h-screen w-full bg-[#F0ECCF] flex items-start justify-center p-4 md:p-6 pt-4 md:pt-6 font-sans overflow-hidden text-[#A4886D]">
             <div className="flex w-full h-[92vh] gap-4 md:gap-6">
 
-
                 <aside className="hidden md:flex w-56 lg:w-64 bg-[#9DB6AC] rounded-[3rem] shadow-xl p-6 flex-col border border-black/5 shrink-0 overflow-hidden">
                     <h2 className="font-bold text-lg text-white flex items-center gap-2 mb-6 px-2">
                         <span><MdBookmarkBorder /></span> Índice
@@ -57,7 +68,7 @@ export default function Noticias() {
                     <ul className="space-y-2 overflow-y-auto" style={hideScrollbarStyle}>
                         {pages.map((p, i) => (
                             <li
-                                key={i}
+                                key={p.id || i} // <--- RECOMENDACIÓN: usar p.id
                                 onClick={() => setPage(i)}
                                 className={`cursor-pointer px-4 py-2 rounded-xl transition-all text-[10px] lg:text-[11px] font-black tracking-widest uppercase
                                     ${i === page
@@ -70,7 +81,6 @@ export default function Noticias() {
                     </ul>
                 </aside>
 
-
                 <main className="flex-1 bg-[#A9A283] rounded-[3rem] shadow-2xl p-8 md:p-12 lg:p-14 flex flex-col relative border border-black/5 overflow-hidden">
                     <div className="flex-1 overflow-y-auto pr-2" style={hideScrollbarStyle}>
                         <h1 className="text-4xl md:text-5xl font-black mb-6 md:mb-8 text-[#F0ECCF]">
@@ -81,7 +91,6 @@ export default function Noticias() {
                             {current.content}
                         </p>
                     </div>
-
 
                     <div className="flex justify-between items-center mt-6 pt-6 border-t border-[#F0ECCF]/20">
                         <button

@@ -8,6 +8,7 @@ export const getContenidoBySeccion = async (seccionNombre) => {
         const data = await response.json();
 
         return data.map(item => ({
+            id: item.id,
             title: item.titulo,
             content: item.contenido
         }));

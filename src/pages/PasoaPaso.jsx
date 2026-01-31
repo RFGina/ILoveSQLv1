@@ -1,27 +1,41 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"; // IMPORTANTE: Para capturar el ID de la búsqueda
 import { MdBookmarkBorder } from "react-icons/md";
 import { getContenidoBySeccion } from "../api/coneapi";
 import { CiCircleChevLeft, CiCircleChevRight } from "react-icons/ci";
 
 export default function PasoAPaso() {
+    const { id } = useParams(); // Capturamos el ID que viene en la URL
     const [pages, setPages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
 
-
     useEffect(() => {
         getContenidoBySeccion("Paso a paso").then((data) => {
             setPages(data);
+
+            // LÓGICA DE REDIRECCIÓN INTERNA
+            if (id && data.length > 0) {
+                // Buscamos el índice del artículo que coincide con el ID de la URL
+                const indexEncontrado = data.findIndex(
+                    (p) => p.id?.toString() === id.toString()
+                );
+
+                // Si existe en esta sección, movemos la "página" a esa posición
+                if (indexEncontrado !== -1) {
+                    setPage(indexEncontrado);
+                }
+            }
+
             setLoading(false);
         });
-    }, []);
+    }, [id]); // Se relanza si el ID en la URL cambia
 
     const hideScrollbarStyle = {
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
         WebkitOverflowScrolling: 'touch'
     };
-
 
     if (loading) {
         return (
@@ -30,7 +44,6 @@ export default function PasoAPaso() {
             </div>
         );
     }
-
 
     if (pages.length === 0) {
         return (
@@ -55,7 +68,7 @@ export default function PasoAPaso() {
                     <ul className="space-y-2 overflow-y-auto" style={hideScrollbarStyle}>
                         {pages.map((p, i) => (
                             <li
-                                key={i}
+                                key={p.id || i}
                                 onClick={() => setPage(i)}
                                 className={`cursor-pointer px-4 py-2 rounded-xl transition-all text-[10px] lg:text-[11px] font-black tracking-widest uppercase
                                     ${i === page
@@ -68,7 +81,6 @@ export default function PasoAPaso() {
                     </ul>
                 </aside>
 
-
                 <main className="flex-1 bg-[#A9A283] rounded-[3rem] shadow-2xl p-8 md:p-12 lg:p-14 flex flex-col relative border border-black/5 overflow-hidden">
                     <div className="flex-1 overflow-y-auto pr-2" style={hideScrollbarStyle}>
                         <h1 className="text-4xl md:text-5xl font-black mb-6 md:mb-8 text-[#F0ECCF]">
@@ -79,7 +91,6 @@ export default function PasoAPaso() {
                             {current.content}
                         </p>
                     </div>
-
 
                     <div className="flex justify-between items-center mt-6 pt-6 border-t border-[#F0ECCF]/20">
                         <button
