@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom"; // Importa useNavigate
+import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function SearchPage() {
@@ -8,7 +8,7 @@ export default function SearchPage() {
     const [results, setResults] = useState([]);
     const navigate = useNavigate();
 
-    // Este objeto mapea el nombre de la sección en la DB con la ruta en React
+    // Mapeo exacto: Nombre en DB -> Ruta en tu App
     const rutasSecciones = {
         "Problemas": "/problemas",
         "Paso a paso": "/paso-a-paso",
@@ -24,8 +24,16 @@ export default function SearchPage() {
     }, [query]);
 
     const handleRedirect = (item) => {
-        const baseRoute = rutasSecciones[item.seccion_nombre] || "/";
-        navigate(`${baseRoute}/${item.id}`);
+        // Obtenemos la ruta según la sección
+        const rutaDestino = rutasSecciones[item.seccion_nombre];
+
+        if (rutaDestino) {
+            // Navega a la sección (ej: /noticias)
+            navigate(rutaDestino);
+        } else {
+            // Si no hay coincidencia, va al inicio por seguridad
+            navigate("/");
+        }
     };
 
     return (
@@ -38,8 +46,8 @@ export default function SearchPage() {
                 {results.length > 0 ? (
                     results.map((item) => (
                         <div
-                            key={item.id} // Soluciona el error de la "key"
-                            onClick={() => handleRedirect(item)} // Hace que todo el cuadro sea clickeable
+                            key={item.id}
+                            onClick={() => handleRedirect(item)}
                             className="bg-white p-6 rounded-2xl shadow-sm border border-transparent hover:border-[#BA8485] hover:shadow-md cursor-pointer transition-all group"
                         >
                             <div className="flex justify-between items-start">
@@ -56,7 +64,7 @@ export default function SearchPage() {
                         </div>
                     ))
                 ) : (
-                    <p className="text-[#A4886D]">No encontramos nada.</p>
+                    <p className="text-[#A4886D]">No encontramos resultados para tu búsqueda.</p>
                 )}
             </div>
         </div>
