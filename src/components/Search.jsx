@@ -8,11 +8,11 @@ export default function SearchPage() {
     const [results, setResults] = useState([]);
     const navigate = useNavigate();
 
-    // Mapeo exacto: Nombre en DB -> Ruta en tu App
+    // Usamos minúsculas aquí para que la comparación sea más fácil
     const rutasSecciones = {
-        "Problemas": "/problemas",
-        "Paso a paso": "/paso-a-paso",
-        "Noticias": "/noticias"
+        "problemas": "/problemas",
+        "paso a paso": "/paso-a-paso",
+        "noticias": "/noticias"
     };
 
     useEffect(() => {
@@ -24,14 +24,17 @@ export default function SearchPage() {
     }, [query]);
 
     const handleRedirect = (item) => {
-        // Obtenemos la ruta según la sección
-        const rutaDestino = rutasSecciones[item.seccion_nombre];
+        // 1. Convertimos lo que viene de la DB a minúsculas y quitamos espacios
+        const seccionDB = item.seccion_nombre ? item.seccion_nombre.toLowerCase().trim() : "";
 
+        // 2. Buscamos en nuestro objeto
+        const rutaDestino = rutasSecciones[seccionDB];
+
+        // 3. Si existe la ruta, vamos allá. Si no, vamos al inicio (evita el undefined)
         if (rutaDestino) {
-            // Navega a la sección (ej: /noticias)
             navigate(rutaDestino);
         } else {
-            // Si no hay coincidencia, va al inicio por seguridad
+            console.warn("Sección no reconocida:", seccionDB);
             navigate("/");
         }
     };
@@ -64,7 +67,7 @@ export default function SearchPage() {
                         </div>
                     ))
                 ) : (
-                    <p className="text-[#A4886D]">No encontramos resultados para tu búsqueda.</p>
+                    <p className="text-[#A4886D]">No encontramos nada.</p>
                 )}
             </div>
         </div>
