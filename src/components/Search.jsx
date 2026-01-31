@@ -17,7 +17,7 @@ export default function SearchPage() {
 
     useEffect(() => {
         if (query) {
-            axios.get(`http://localhost:8000/api/buscar/?q=${query}`)
+            axios.get(`https://georgina.pythonanywhere.com/api/buscar/?q=${query}`)
                 .then(res => setResults(res.data))
                 .catch(err => console.error(err));
         }
