@@ -24,11 +24,8 @@ export default function SearchPage() {
     }, [query]);
 
     const handleRedirect = (item) => {
-        // Obtenemos la ruta base (ej: /problemas)
         const baseRoute = rutasSecciones[item.seccion_nombre] || "/";
-        // Navegamos pasando el título o el ID para que la otra página sepa qué mostrar
-        // Si tu página de destino ya carga todos los datos, podrías pasar el índice o título
-        navigate(baseRoute, { state: { selectedTitle: item.titulo } });
+        navigate(`${baseRoute}/${item.id}`);
     };
 
     return (
