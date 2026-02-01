@@ -10,7 +10,10 @@ export const getContenidoBySeccion = async (seccionNombre) => {
         return data.map(item => ({
             id: item.id,
             title: item.titulo,
-            content: item.contenido
+            content: item.contenido,
+            image: item.image
+                ? (item.image.startsWith('http') ? item.image : `https://georgina.pythonanywhere.com/media/contenido/${item.image}`)
+                : null
         }));
     } catch (error) {
         console.error(`Error buscando ${seccionNombre}:`, error);

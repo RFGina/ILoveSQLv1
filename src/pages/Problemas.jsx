@@ -1,20 +1,30 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { MdBookmarkBorder } from "react-icons/md";
 import { getContenidoBySeccion } from "../api/coneapi";
 import { CiCircleChevLeft, CiCircleChevRight } from "react-icons/ci";
 
 export default function Problemas() {
+    const { id } = useParams();
     const [pages, setPages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
 
 
     useEffect(() => {
-        getContenidoBySeccion("Problemas").then((data) => {
+        getContenidoBySeccion("Noticias").then((data) => {
             setPages(data);
+            if (id && data.length > 0) {
+                const indexEncontrado = data.findIndex(
+                    (p) => p.id?.toString() === id.toString()
+                );
+                if (indexEncontrado !== -1) {
+                    setPage(indexEncontrado);
+                }
+            }
             setLoading(false);
         });
-    }, []);
+    }, [id]);
 
     const hideScrollbarStyle = {
         msOverflowStyle: 'none',
@@ -77,6 +87,16 @@ export default function Problemas() {
                         <p className="whitespace-pre-line text-lg md:text-xl lg:text-2xl leading-relaxed text-[#F0ECCF] opacity-95">
                             {current.content}
                         </p>
+                        {current.image && (
+                            <div className="w-full mb-8 rounded-3xl shadow-lg bg-[#F0ECCF]/10 p-1">
+                                <img
+                                    src={current.image}
+                                    alt={current.title}
+                                    className="w-full h-auto max-h-[500px] object-contain rounded-2xl"
+                                    onError={(e) => e.target.style.display = 'none'}
+                                />
+                            </div>
+                        )}
                     </div>
 
 
