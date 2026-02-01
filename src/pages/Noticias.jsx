@@ -5,7 +5,7 @@ import { getContenidoBySeccion } from "../api/coneapi";
 import { CiCircleChevLeft, CiCircleChevRight } from "react-icons/ci";
 
 export default function Noticias() {
-    const { id } = useParams(); // <--- CAMBIO AQUÍ: Capturar el ID de la URL
+    const { id } = useParams();
     const [pages, setPages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
@@ -14,23 +14,21 @@ export default function Noticias() {
         getContenidoBySeccion("Noticias").then((data) => {
             setPages(data);
 
-            // --- LÓGICA PARA EL BUSCADOR ---
-            // Si hay un ID en la URL, buscamos en qué posición del array está ese ID
             if (id && data.length > 0) {
                 const targetIndex = data.findIndex(
                     (p) => p.id?.toString() === id.toString()
                 );
 
-                // Si lo encuentra, cambiamos el estado de 'page' a ese índice
+
                 if (targetIndex !== -1) {
                     setPage(targetIndex);
                 }
             }
-            // ------------------------------
+
 
             setLoading(false);
         });
-    }, [id]); // <--- CAMBIO AQUÍ: Ejecutar si el ID de la URL cambia
+    }, [id]);
 
     const hideScrollbarStyle = {
         msOverflowStyle: 'none',
@@ -68,7 +66,7 @@ export default function Noticias() {
                     <ul className="space-y-2 overflow-y-auto" style={hideScrollbarStyle}>
                         {pages.map((p, i) => (
                             <li
-                                key={p.id || i} // <--- RECOMENDACIÓN: usar p.id
+                                key={p.id || i}
                                 onClick={() => setPage(i)}
                                 className={`cursor-pointer px-4 py-2 rounded-xl transition-all text-[10px] lg:text-[11px] font-black tracking-widest uppercase
                                     ${i === page

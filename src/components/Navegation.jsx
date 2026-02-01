@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Importamos useNavigate
-import { FaRegHeart, FaSearch } from "react-icons/fa"; // Agregué FaSearch
+import { Link, useNavigate } from "react-router-dom";
+import { FaRegHeart, FaSearch } from "react-icons/fa";
 import { PiHamburger } from "react-icons/pi";
 
 export default function Navegation() {
@@ -22,7 +22,7 @@ export default function Navegation() {
             <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="relative flex h-20 items-center justify-between gap-4">
 
-                    {/* Menu Mobile Button */}
+
                     <div className="flex items-center sm:hidden">
                         <button
                             onClick={() => setMobileOpen(!mobileOpen)}
@@ -32,7 +32,7 @@ export default function Navegation() {
                         </button>
                     </div>
 
-                    {/* Logo */}
+
                     <div className="">
                         <Link
                             to="/"
@@ -56,7 +56,7 @@ export default function Navegation() {
                         </div>
                     </div>
 
-                    {/* BARRA DE BÚSQUEDA */}
+
                     <form onSubmit={handleSearch} className="relative flex-1 max-w-md hidden md:block">
                         <input
                             type="text"
@@ -73,7 +73,7 @@ export default function Navegation() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+
             {mobileOpen && (
                 <div className="sm:hidden space-y-2 px-4 pt-2 pb-6 bg-[#F0ECCF]">
                     {/* Buscador en versión móvil */}

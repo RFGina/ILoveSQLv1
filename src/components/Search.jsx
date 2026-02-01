@@ -53,7 +53,7 @@ export default function SearchPage() {
                 {results.length > 0 ? (
                     results.map((item) => (
                         <div
-                            key={item.id} // Usamos el ID real de Django
+                            key={item.id}
                             onClick={() => handleRedirect(item)}
                             className="bg-white p-6 rounded-2xl shadow-sm border border-transparent hover:border-[#BA8485] hover:shadow-md cursor-pointer transition-all group"
                         >

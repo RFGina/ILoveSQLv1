@@ -12,7 +12,7 @@ export default function SocialFloat() {
 
     return (
         <div
-            className="fixed bottom-8 left-8 flex flex-col items-center gap-3 z-50" // A la izquierda con buen margen
+            className="fixed bottom-8 left-8 flex flex-col items-center gap-3 z-50"
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => setIsOpen(false)}
         >
