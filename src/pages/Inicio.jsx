@@ -4,6 +4,37 @@ import { FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function Inicio() {
+    const [status, setStatus] = useState("")
+
+    // FUNCIÓN AJAX PARA EL ENVÍO
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus("SENDING");
+
+        const form = e.target;
+        const data = new FormData(form);
+
+        try {
+            const response = await fetch("https://formspree.io/f/xlgnkkge", {
+                method: "POST",
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                setStatus("SUCCESS");
+                form.reset();
+                // Opcional: limpiar el mensaje después de 5 segundos
+                setTimeout(() => setStatus(""), 5000);
+            } else {
+                setStatus("ERROR");
+            }
+        } catch (error) {
+            setStatus("ERROR");
+        }
+    };
     return (
         <div className="min-h-screen w-full bg-[#F0ECCF] flex flex-col items-center p-4 md:p-8 font-sans text-[#A4886D]">
 
@@ -81,10 +112,23 @@ export default function Inicio() {
 
                     <button
                         type="submit"
+                        disabled={status === "SENDING"}
                         className="w-full bg-[#BA8485] hover:bg-[#A4886D] text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-[#BA8485]/20 active:scale-95 uppercase tracking-widest text-sm"
                     >
                         Enviar mensaje
+                        {status === "SENDING" ? "Enviando..." : "Enviar mensaje"}
                     </button>
+                    {/* MENSAJES DE ESTADO */}
+                    {status === "SUCCESS" && (
+                        <p className="mt-2 text-green-500 font-mono text-xs animate-pulse text-center italic">
+                            ¡Mensaje enviado con éxito! Te responderé pronto.
+                        </p>
+                    )}
+                    {status === "ERROR" && (
+                        <p className="mt-2 text-red-500 font-mono text-xs text-center italic">
+                            Hubo un error. Por favor, intenta de nuevo.
+                        </p>
+                    )}
                 </form>
             </section>
 
