@@ -81,9 +81,9 @@ export default function Inicio() {
                 </div>
 
 
+                {/* FORMU CORREGIDO */}
                 <form
-                    action="https://formspree.io/f/xlgnkkge"
-                    method="POST"
+                    onSubmit={handleSubmit}
                     className="bg-[#EDDBC6] rounded-[3rem] p-10 shadow-xl flex flex-col gap-4 border border-[#A4886D]/10"
                 >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -113,19 +113,20 @@ export default function Inicio() {
                     <button
                         type="submit"
                         disabled={status === "SENDING"}
-                        className="w-full bg-[#BA8485] hover:bg-[#A4886D] text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-[#BA8485]/20 active:scale-95 uppercase tracking-widest text-sm"
+                        className="w-full bg-[#BA8485] hover:bg-[#A4886D] text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-[#BA8485]/20 active:scale-95 uppercase tracking-widest text-sm disabled:opacity-50"
                     >
-                        Enviar mensaje
+                        {/* Ternario para que no se duplique el texto */}
                         {status === "SENDING" ? "Enviando..." : "Enviar mensaje"}
                     </button>
+
                     {/* MENSAJES DE ESTADO */}
                     {status === "SUCCESS" && (
-                        <p className="mt-2 text-green-500 font-mono text-xs animate-pulse text-center italic">
+                        <p className="mt-2 text-green-600 font-mono text-xs animate-pulse text-center italic font-bold">
                             ¡Mensaje enviado con éxito! Te responderé pronto.
                         </p>
                     )}
                     {status === "ERROR" && (
-                        <p className="mt-2 text-red-500 font-mono text-xs text-center italic">
+                        <p className="mt-2 text-red-500 font-mono text-xs text-center italic font-bold">
                             Hubo un error. Por favor, intenta de nuevo.
                         </p>
                     )}
